@@ -1,0 +1,16 @@
+* text=auto eol=lf
+*.py text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.jsonl text eol=lf
+*.txt text eol=crlf
+*.bat text eol=crlf
+*.sh text eol=lf
+tmp/ export-ignore
+runs/ export-ignore
+.venv/ export-ignore
+frontend/node_modules/ export-ignore

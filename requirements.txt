@@ -1,0 +1,13 @@
+openai>=1.0
+httpx[socks]>=0.27
+sqlglot>=25.0
+openpyxl>=3.1
+jieba>=0.42
+rank-bm25>=0.2
+pymysql>=1.0
+pg8000>=1.30
+
+# FastAPI 后端与 React 前端（server/ + frontend/）
+fastapi>=0.110
+uvicorn>=0.27
+pyyaml>=6.0

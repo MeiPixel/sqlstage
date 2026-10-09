@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sqlstage"
+version = "0.5.0"
+description = "可配置、可评测、可自动寻优的 Text2SQL 工作台，含 ORM 约束与 LoRA 训练链路"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+keywords = ["text2sql", "sql", "llm", "nl2sql", "orm", "evaluation", "workbench"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Natural Language :: Chinese (Simplified)",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Database",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+  "openai>=1.0",
+  "httpx[socks]>=0.27",
+  "sqlglot>=25.0",
+  "openpyxl>=3.1",
+  "jieba>=0.42",
+  "rank-bm25>=0.2",
+  "pymysql>=1.0",
+  "pg8000>=1.30",
+]
+
+[project.optional-dependencies]
+# 工作台后端：server/ 与 React 前端配套使用
+api = ["fastapi>=0.110", "uvicorn>=0.27", "pyyaml>=6.0"]
+# LoRA 训练链路，见 training/README.md
+train = [
+  "torch>=2.1",
+  "transformers>=4.40",
+  "peft>=0.10",
+  "trl>=0.8",
+  "accelerate>=0.30",
+  "datasets>=2.18",
+]
+dev = ["build>=1.0"]
+
+[tool.setuptools.packages.find]
+include = ["sqlstage*", "server*"]

@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: 后端测试（${{ matrix.os }}）
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: 安装依赖
+        run: python -m pip install -r requirements-lock.txt
+      - name: 跑原生测试
+        # 默认仅离线测试，Store 在临时目录；不连接用户数据库或付费模型。
+        run: python tools/run_tests.py
+
+  frontend:
+    name: 前端类型检查与构建
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: 类型检查
+        run: npx tsc -b
+      - name: 构建
+        run: npm run build
+
+  package:
+    name: 包可安装性
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: 构建 wheel 并验证可安装
+        run: |
+          python -m pip install build
+          python -m build
+          python -m pip install dist/*.whl
+          python -c "import sqlstage; from sqlstage import Text2SQLEngine; print('sqlstage import OK')"
